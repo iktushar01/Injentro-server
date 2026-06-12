@@ -3,7 +3,7 @@ model User {
   name                String
   email               String     @unique
   emailVerified       Boolean    @default(false)
-  role                Role       @default(STUDENT)
+  role                Role       @default(CLIENT)
   status              UserStatus @default(ACTIVE)
   needPasswordChange  Boolean    @default(false)
   isDeleted           Boolean    @default(false)
@@ -18,6 +18,8 @@ model User {
   lockedUntil         DateTime?
   accounts            Account[]
   admin               Admin?
+  client              Client?
+  sessions            Session[]
 
   @@map("user")
 }
