@@ -467,7 +467,7 @@ export class QueryBuilder<
    * Merges a hard-coded condition into the `where` clause.
    * Use for business rules that clients must not override:
    *   .where({ isDeleted: false })
-   *   .where({ classroomId: "abc" })
+
    *
    * Supports deep merge — calling where() multiple times accumulates conditions.
    */
