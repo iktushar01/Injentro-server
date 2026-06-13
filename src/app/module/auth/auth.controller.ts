@@ -41,10 +41,10 @@ const clearAuthCookies = (res: Response) => {
 
 // ─── Register ─────────────────────────────────────────────────────────────────
 
-const registerStudent = catchAsync(async (req: Request, res: Response) => {
+const registerClient = catchAsync(async (req: Request, res: Response) => {
     const fileBuffer = (req as any).file?.buffer;
     const fileName = (req as any).file?.originalname;
-    const result = await AuthService.registerStudent(req.body, fileBuffer, fileName);
+    const result = await AuthService.registerClient(req.body, fileBuffer, fileName);
 
     setAuthCookies(res, {
         accessToken: result.accessToken,
@@ -55,10 +55,10 @@ const registerStudent = catchAsync(async (req: Request, res: Response) => {
     sendResponse(res, {
         statusCode: StatusCodes.CREATED,
         success: true,
-        message: "Student registered successfully",
+        message: "Client registered successfully",
         data: {
             user: result.user,
-            student: result.student,
+            client: result.client,
             accessToken: result.accessToken,
             refreshToken: result.refreshToken,
             token: result.token,
@@ -345,7 +345,7 @@ const exchangeOAuthCode = catchAsync(async (req: Request, res: Response) => {
 // ─── Exports ──────────────────────────────────────────────────────────────────
 
 export const AuthController = {
-    registerStudent,
+    registerClient,
     loginUser,
     getMe,
     updateProfile,

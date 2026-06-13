@@ -5,7 +5,7 @@ import { validateRequest } from "../../middleware/validateRequest";
 import { memoryUpload } from "../../../config/multer.config";
 import { AuthController } from "./auth.controller";
 import { 
-    registerStudentZodSchema,
+    registerClientZodSchema,
     loginZodSchema,
     verifyEmailZodSchema,
     forgetPasswordZodSchema,
@@ -23,8 +23,8 @@ const router = Router();
 router.post(
     "/register",
     memoryUpload.single("image"),
-    validateRequest(registerStudentZodSchema),
-    AuthController.registerStudent,
+    validateRequest(registerClientZodSchema),
+    AuthController.registerClient,
 );
 
 router.post(
@@ -62,7 +62,7 @@ router.get("/oauth/error", AuthController.handleOAuthError);
 
 // ─── Authenticated routes (all roles) ────────────────────────────────────────
 
-const allRoles = [Role.STUDENT, Role.ADMIN, Role.SUPER_ADMIN] as const;
+const allRoles = [Role.CLIENT, Role.ADMIN, Role.SUPER_ADMIN] as const;
 
 router.get("/me", checkAuth(...allRoles), AuthController.getMe);
 

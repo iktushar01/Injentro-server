@@ -3,11 +3,11 @@ import { Gender } from "../../lib/prisma-exports";
 
 /**
  * Auth module owns the public registration schema.
- * The user module's createStudentZodSchema (which required gender, contactNumber, etc.)
- * is for admin-created students with full profiles. Public self-registration only
+ * The user module's createClientZodSchema (which required gender, contactNumber, etc.)
+ * is for admin-created clients with full profiles. Public self-registration only
  * needs the minimum required fields — additional profile data can be filled later.
  */
-export const registerStudentZodSchema = z.object({
+export const registerClientZodSchema = z.object({
     name: z
         .string({ message: "Name is required" })
         .min(2, "Name must be at least 2 characters")

@@ -11,7 +11,7 @@ import { uploadFileToCloudinary, deleteFileFromCloudinary } from "../../../confi
 import {
     IChangePassWordPayload,
     ILoginUser,
-    IRegisterStudent,
+    IRegisterClient,
     IRequestUser,
     IUpdateProfilePayload,
 } from "./auth.interface";
@@ -48,7 +48,7 @@ const buildTokenPair = (user: {
 
 // ─── Register ─────────────────────────────────────────────────────────────────
 
-const registerStudent = async (payload: IRegisterStudent, fileBuffer?: Buffer, fileName?: string) => {
+const registerClient = async (payload: IRegisterClient, fileBuffer?: Buffer, fileName?: string) => {
     const { name, email, password } = payload;
 
     // 1. Prepare upload promise
@@ -87,9 +87,9 @@ const registerStudent = async (payload: IRegisterStudent, fileBuffer?: Buffer, f
     }
 
     try {
-        // Create the student profile and update the user's image URL in a single transaction
-        const [student] = await prisma.$transaction(async (tx) => {
-            const createdStudent = await tx.student.create({
+        // Create the client profile and update the user's image URL in a single transaction
+        const [client] = await prisma.$transaction(async (tx) => {
+            const createdClient = await tx.client.create({
                 data: {
                     userId: authData.user.id,
                     name,
@@ -109,7 +109,7 @@ const registerStudent = async (payload: IRegisterStudent, fileBuffer?: Buffer, f
                 authData.user.image = imageUrl;
             }
 
-            return [createdStudent];
+            return [createdClient];
         });
 
         const { accessToken, refreshToken } = buildTokenPair({
@@ -124,7 +124,7 @@ const registerStudent = async (payload: IRegisterStudent, fileBuffer?: Buffer, f
 
         return {
             user: authData.user,
-            student,
+            client,
             token: authData.token,
             accessToken,
             refreshToken,
@@ -202,7 +202,7 @@ const fetchCurrentUserById = async (userId: string) => {
     const dbUser = await prisma.user.findUnique({
         where: { id: userId },
         include: {
-            student: true,
+            client: true,
             admin: true,
         },
     });
@@ -236,7 +236,7 @@ const updateProfile = async (payload: IUpdateProfilePayload) => {
         select: {
             id: true,
             role: true,
-            student: { select: { id: true } },
+            client: { select: { id: true } },
             admin: { select: { id: true } },
         },
     });
@@ -271,29 +271,29 @@ const updateProfile = async (payload: IUpdateProfilePayload) => {
             });
         }
 
-        if (role === Role.STUDENT && dbUser.student) {
-            const studentUpdateData: Prisma.StudentUpdateInput = {};
+        if (role === Role.CLIENT && dbUser.client) {
+            const clientUpdateData: Prisma.ClientUpdateInput = {};
 
             if (name !== undefined) {
-                studentUpdateData.name = name;
+                clientUpdateData.name = name;
             }
             if (finalProfilePhoto !== undefined) {
-                studentUpdateData.profilePhoto = finalProfilePhoto;
+                clientUpdateData.profilePhoto = finalProfilePhoto;
             }
             if (contactNumber !== undefined) {
-                studentUpdateData.contactNumber = contactNumber;
+                clientUpdateData.contactNumber = contactNumber;
             }
             if (address !== undefined) {
-                studentUpdateData.address = address;
+                clientUpdateData.address = address;
             }
             if (gender !== undefined) {
-                studentUpdateData.gender = gender;
+                clientUpdateData.gender = gender;
             }
 
-            if (Object.keys(studentUpdateData).length > 0) {
-                await tx.student.update({
+            if (Object.keys(clientUpdateData).length > 0) {
+                await tx.client.update({
                     where: { userId },
-                    data: studentUpdateData,
+                    data: clientUpdateData,
                 });
             }
         }
@@ -505,13 +505,13 @@ const googleLoginSuccess = async (session: {
 }) => {
     const { user } = session;
 
-    // Lazily create the student profile if this is the first Google sign-in
-    const studentExists = await prisma.student.findUnique({
+    // Lazily create the client profile if this is the first Google sign-in
+    const clientExists = await prisma.client.findUnique({
         where: { userId: user.id },
     });
 
-    if (!studentExists) {
-        await prisma.student.create({
+    if (!clientExists) {
+        await prisma.client.create({
             data: {
                 userId: user.id,
                 name: user.name,
@@ -560,7 +560,7 @@ const issueTokensFromOAuthCode = async (user: {
 // ─── Exports ──────────────────────────────────────────────────────────────────
 
 export const AuthService = {
-    registerStudent,
+    registerClient,
     loginUser,
     getMe,
     updateProfile,

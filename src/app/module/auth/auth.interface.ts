@@ -6,7 +6,7 @@ export interface IUploadedFile {
   mimetype: string;
   size: number;       // bytes
 }
-export interface IRegisterStudent {
+export interface IRegisterClient {
     name: string;
     email: string;
     password: string;
