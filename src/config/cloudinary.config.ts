@@ -31,8 +31,8 @@ const getCloudinaryResourceType = (fileName: string): "image" | "raw" => {
 
 const collapseDuplicateFolderSegments = (assetPath: string) =>
     assetPath
-        .replace(/^(Acadex\/pdfs)\/\1\//, "$1/")
-        .replace(/^(Acadex\/images)\/\1\//, "$1/");
+        .replace(/^(Injentro\/pdfs)\/\1\//, "$1/")
+        .replace(/^(Injentro\/images)\/\1\//, "$1/");
 
 const getDedupedPath = (pathname: string) => {
     const match = pathname.match(/(\/upload\/(?:v\d+\/)?)(.+)$/);
@@ -119,7 +119,7 @@ export const uploadFileToCloudinary = async (
             {
                 resource_type: resourceType,
                 public_id: uniqueName,
-                folder: `Acadex/${folder}`,
+                folder: `Injentro/${folder}`,
                 use_filename: false,
                 unique_filename: false,
             },
