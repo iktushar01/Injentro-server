@@ -17,6 +17,19 @@ const bootstrap = async () => {
       `✅ Server running on ${process.env.NODE_ENV || envVars.NODE_ENV} mode at http://localhost:${port}`
     );
 
+    const googleClientIdLooksValid = envVars.GOOGLE_CLIENT_ID.endsWith(".apps.googleusercontent.com");
+    const googleSecretLooksValid = envVars.GOOGLE_CLIENT_SECRET.startsWith("GOCSPX-");
+
+    if (!googleClientIdLooksValid || !googleSecretLooksValid) {
+      console.warn(
+        "⚠️ Google OAuth env looks misconfigured. Check GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET in .env.",
+      );
+    }
+
+    console.log(
+      `ℹ️ Google OAuth callback URI: ${envVars.GOOGLE_CALLBACK_URL}`,
+    );
+
     // Seed super admin (errors won't break server)
     seedSuperAdmin().catch((error) => {
       console.error(

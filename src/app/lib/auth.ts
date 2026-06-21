@@ -7,6 +7,9 @@ import ms, { StringValue } from "ms";
 import { bearer, emailOTP } from "better-auth/plugins";
 import { sendEmail } from "../utils/email";
 
+const isProduction = envVars.NODE_ENV === "production";
+const secureCookies = isProduction;
+
 export const auth = betterAuth({
     baseURL : envVars.BETTER_AUTH_URL,
     secret : envVars.BETTER_AUTH_SECRET,
@@ -21,6 +24,8 @@ export const auth = betterAuth({
         google: {
             clientId: envVars.GOOGLE_CLIENT_ID,
             clientSecret: envVars.GOOGLE_CLIENT_SECRET,
+            redirectURI: envVars.GOOGLE_CALLBACK_URL,
+            prompt: "select_account",
             mapProfileToUser: (profile: any) => {
                 return {
                     role: Role.CLIENT,
@@ -129,8 +134,8 @@ export const auth = betterAuth({
             maxAge: ms(envVars.BETTER_AUTH_SESSION_TOKEN_EXPIRES_IN as StringValue) / 1000,
             cookieOptions: {
                 httpOnly: true,
-                secure: true,
-                sameSite: "none",
+                secure: secureCookies,
+                sameSite: secureCookies ? "none" : "lax",
                 path: "/",
             }
         }
@@ -145,20 +150,20 @@ export const auth = betterAuth({
 
     advanced: {
         // disableCSRFCheck: true,
-        useSecureCookies : false,
+        useSecureCookies : secureCookies,
         cookies:{
             state:{
                 attributes:{
-                    sameSite: "none",
-                    secure: true,
+                    sameSite: secureCookies ? "none" : "lax",
+                    secure: secureCookies,
                     httpOnly: true,
                     path: "/",
                 }
             },
             sessionToken:{
                 attributes:{
-                    sameSite: "none",
-                    secure: true,
+                    sameSite: secureCookies ? "none" : "lax",
+                    secure: secureCookies,
                     httpOnly: true,
                     path: "/",
                 }
