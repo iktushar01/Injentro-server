@@ -1,5 +1,5 @@
-import type { Prisma } from "../../../generated/prisma/index";
-import { Prisma as PrismaValue, Role, UserStatus } from "../../lib/prisma-exports";
+import type { Prisma as PrismaTypes } from "../../../generated/prisma/index";
+import { Prisma, Role, UserStatus } from "../../lib/prisma-exports";
 import AppError from "../../errorHelpers/AppError";
 import { auth } from "../../lib/auth";
 import { prisma } from "../../lib/prisma";
@@ -141,8 +141,8 @@ const registerClient = async (payload: IRegisterClient, fileBuffer?: Buffer, fil
         }
 
         if (
-            error instanceof PrismaValue.PrismaClientKnownRequestError &&
-            (error as PrismaValue.PrismaClientKnownRequestError).code === "P2002"
+            error instanceof Prisma.PrismaClientKnownRequestError &&
+            (error as PrismaTypes.PrismaClientKnownRequestError).code === "P2002"
         ) {
             throw new AppError(
                 StatusCodes.CONFLICT,
@@ -254,7 +254,7 @@ const updateProfile = async (payload: IUpdateProfilePayload) => {
         uploadedProfilePhoto !== undefined ? uploadedProfilePhoto : profilePhoto;
 
     await prisma.$transaction(async (tx) => {
-        const userUpdateData: Prisma.UserUpdateInput = {};
+        const userUpdateData: PrismaTypes.UserUpdateInput = {};
 
         if (name !== undefined) {
             userUpdateData.name = name;
@@ -272,7 +272,7 @@ const updateProfile = async (payload: IUpdateProfilePayload) => {
         }
 
         if (role === Role.CLIENT && dbUser.client) {
-            const clientUpdateData: Prisma.ClientUpdateInput = {};
+            const clientUpdateData: PrismaTypes.ClientUpdateInput = {};
 
             if (name !== undefined) {
                 clientUpdateData.name = name;
@@ -299,7 +299,7 @@ const updateProfile = async (payload: IUpdateProfilePayload) => {
         }
 
         if ((role === Role.ADMIN || role === Role.SUPER_ADMIN) && dbUser.admin) {
-            const adminUpdateData: Prisma.AdminUpdateInput = {};
+            const adminUpdateData: PrismaTypes.AdminUpdateInput = {};
 
             if (name !== undefined) {
                 adminUpdateData.name = name;
