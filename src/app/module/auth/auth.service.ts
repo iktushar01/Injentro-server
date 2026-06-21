@@ -142,7 +142,7 @@ const registerClient = async (payload: IRegisterClient, fileBuffer?: Buffer, fil
 
         if (
             error instanceof PrismaValue.PrismaClientKnownRequestError &&
-            error.code === "P2002"
+            (error as PrismaValue.PrismaClientKnownRequestError).code === "P2002"
         ) {
             throw new AppError(
                 StatusCodes.CONFLICT,
