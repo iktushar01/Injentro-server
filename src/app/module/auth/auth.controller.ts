@@ -241,6 +241,7 @@ const googleLogin = catchAsync((req: Request, res: Response) => {
         callbackURL,
         betterAuthUrl: envVars.BETTER_AUTH_URL,
         frontendUrl: envVars.FRONTEND_URL,
+        appName: envVars.APP_NAME,
     });
 });
 

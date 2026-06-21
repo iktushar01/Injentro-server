@@ -32,9 +32,12 @@ interface EmailOptions {
 export const sendEmail = async ({ subject, to, templateName, templateData, attachments }: EmailOptions) => {
     try {
         const templatePath = path.resolve(process.cwd(), `src/app/templates/${templateName}.ejs`);
-        const html = await ejs.renderFile(templatePath, templateData);
+        const html = await ejs.renderFile(templatePath, {
+            appName: envVars.APP_NAME,
+            ...templateData,
+        });
         const info = await transporter.sendMail({
-            from: `"Injentro" <${envVars.EMAIL_USER}>`,
+            from: `"${envVars.APP_NAME}" <${envVars.EMAIL_USER}>`,
             to: to,
             subject: subject,
             html: html,

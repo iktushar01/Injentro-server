@@ -29,10 +29,16 @@ const getCloudinaryResourceType = (fileName: string): "image" | "raw" => {
     return extension === "pdf" ? "raw" : "image";
 };
 
-const collapseDuplicateFolderSegments = (assetPath: string) =>
-    assetPath
-        .replace(/^(Injentro\/pdfs)\/\1\//, "$1/")
-        .replace(/^(Injentro\/images)\/\1\//, "$1/");
+const escapeRegex = (value: string) => value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+
+const collapseDuplicateFolderSegments = (assetPath: string) => {
+    const prefix = envVars.APP_UPLOAD_FOLDER;
+    const escapedPrefix = escapeRegex(prefix);
+
+    return assetPath
+        .replace(new RegExp(`^(${escapedPrefix}\\/pdfs)\\/\\1\\/`), "$1/")
+        .replace(new RegExp(`^(${escapedPrefix}\\/images)\\/\\1\\/`), "$1/");
+};
 
 const getDedupedPath = (pathname: string) => {
     const match = pathname.match(/(\/upload\/(?:v\d+\/)?)(.+)$/);
@@ -119,7 +125,7 @@ export const uploadFileToCloudinary = async (
             {
                 resource_type: resourceType,
                 public_id: uniqueName,
-                folder: `Injentro/${folder}`,
+                folder: `${envVars.APP_UPLOAD_FOLDER}/${folder}`,
                 use_filename: false,
                 unique_filename: false,
             },

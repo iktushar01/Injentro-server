@@ -1,6 +1,7 @@
 import multer from "multer";
 import { CloudinaryStorage } from "multer-storage-cloudinary";
 import { cloudinaryUpload } from "./cloudinary.config";
+import { envVars } from "./env";
 
 const storage = new CloudinaryStorage({
     cloudinary: cloudinaryUpload,
@@ -23,7 +24,7 @@ const storage = new CloudinaryStorage({
         const folder = extension === "pdf" ? "pdfs" : "images";
 
         return {
-            folder: `Injentro/${folder}`,
+            folder: `${envVars.APP_UPLOAD_FOLDER}/${folder}`,
             public_id: uniqueName,
             resource_type: "auto",
         };

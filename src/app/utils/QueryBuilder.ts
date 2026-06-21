@@ -19,12 +19,12 @@ import {
  * Typical usage in a service:
  *
  * ```ts
- * const result = await new QueryBuilder<Classroom>(
- *   prisma.classroom,
+ * const result = await new QueryBuilder<User>(
+ *   prisma.user,
  *   req.query,
  *   {
- *     searchableFields: ["name", "institutionName", "creator.email"],
- *     filterableFields: ["status", "level", "institutionName"],
+ *     searchableFields: ["name", "email"],
+ *     filterableFields: ["role", "status"],
  *   },
  * )
  *   .search()
@@ -37,7 +37,7 @@ import {
  * ```
  *
  * Type parameters:
- *  - `T`            — the Prisma model type (e.g. `Classroom`)
+ *  - `T`            — the Prisma model type (e.g. `User`)
  *  - `TWhereInput`  — the Prisma `WhereInput` type for that model (optional)
  *  - `TInclude`     — the Prisma `Include` type for that model (optional)
  */

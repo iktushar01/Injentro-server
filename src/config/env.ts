@@ -35,6 +35,8 @@ interface EnvConfig {
     IMGBB_API_KEY: string;
     SUPER_ADMIN_EMAIL: string;
     SUPER_ADMIN_PASSWORD: string;
+    APP_NAME: string;
+    APP_UPLOAD_FOLDER: string;
 }
 
 const requiredEnvVariables = [
@@ -66,6 +68,8 @@ const requiredEnvVariables = [
     "IMGBB_API_KEY",
     "SUPER_ADMIN_EMAIL",
     "SUPER_ADMIN_PASSWORD",
+    "APP_NAME",
+    "APP_UPLOAD_FOLDER",
 ];
 
 
@@ -105,6 +109,8 @@ const loadEnvVariables = (): EnvConfig => {
         IMGBB_API_KEY: process.env.IMGBB_API_KEY as string,
         SUPER_ADMIN_EMAIL: process.env.SUPER_ADMIN_EMAIL as string,
         SUPER_ADMIN_PASSWORD: process.env.SUPER_ADMIN_PASSWORD as string,
+        APP_NAME: process.env.APP_NAME as string,
+        APP_UPLOAD_FOLDER: process.env.APP_UPLOAD_FOLDER as string,
     }
 }
 

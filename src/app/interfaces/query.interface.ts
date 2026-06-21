@@ -41,8 +41,8 @@ export interface PrismaWhereConditions {
  * Minimal delegate interface that covers the two Prisma model methods
  * the QueryBuilder calls: `findMany` and `count`.
  *
- * All generated Prisma model delegates (e.g. prisma.classroom,
- * prisma.note) satisfy this shape.
+ * All generated Prisma model delegates (e.g. prisma.user,
+ * prisma.client) satisfy this shape.
  */
 export interface PrismaModelDelegate {
   findMany: (args?: Record<string, unknown>) => Promise<unknown[]>;
